@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:digicard/menu.dart';
+import 'package:digicard/screens/menu.dart';
 
 void main() {
   runApp(const MyApp());
