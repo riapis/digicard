@@ -1,16 +1,18 @@
+import 'package:digicard/models/card_model.dart';
 import 'package:flutter/material.dart';
-import 'package:digicard/screens/shoplist_form.dart';
+import 'package:digicard/screens/cardlist_form.dart';
+import 'package:digicard/screens/card_collection.dart';
 
-class CardCollection {
+class CollectionItem {
   final String name;
   final IconData icon;
   final Color color;
 
-  CardCollection(this.name, this.icon, this.color);
+  CollectionItem(this.name, this.icon, this.color);
 }
 
 class CardContainer extends StatelessWidget {
-  final CardCollection item;
+  final CollectionItem item;
 
   const CardContainer(this.item, {super.key}); // Constructor
 
@@ -30,6 +32,13 @@ class CardContainer extends StatelessWidget {
           if (item.name == "Tambah Kartu") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ShopFormPage()));
+          }
+
+          if (item.name == "Lihat Kartu") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CardListPage(cardItem: cardItem)));
           }
         },
         child: Container(

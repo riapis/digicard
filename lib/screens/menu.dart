@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:digicard/widgets/left_drawer.dart';
-import 'package:digicard/screens/shoplist_form.dart';
+import 'package:digicard/screens/cardlist_form.dart';
 import 'package:digicard/widgets/shop_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
-  final List<CardCollection> items = [
-    CardCollection("Lihat Kartu", Icons.featured_play_list_rounded,
+  final List<CollectionItem> items = [
+    CollectionItem("Lihat Kartu", Icons.featured_play_list_rounded,
         const Color.fromARGB(255, 54, 193, 244)),
-    CardCollection("Tambah Kartu", Icons.add_card_rounded,
+    CollectionItem("Tambah Kartu", Icons.add_card_rounded,
         Color.fromARGB(255, 130, 240, 141)),
-    CardCollection("Logout", Icons.logout, Color.fromARGB(255, 236, 120, 120)),
+    CollectionItem("Logout", Icons.logout, Color.fromARGB(255, 236, 120, 120)),
   ];
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -62,7 +62,7 @@ class MyHomePage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                children: items.map((CardCollection item) {
+                children: items.map((CollectionItem item) {
                   // Iterasi untuk setiap item
                   return CardContainer(item);
                 }).toList(),

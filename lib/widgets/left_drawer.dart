@@ -1,6 +1,7 @@
-import 'package:digicard/screens/shoplist_form.dart';
+import 'package:digicard/screens/cardlist_form.dart';
 import 'package:flutter/material.dart';
 import 'package:digicard/screens/menu.dart';
+import 'package:digicard/screens/card_collection.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -17,7 +18,7 @@ class LeftDrawer extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Shopping List',
+                  'Digicard',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -27,7 +28,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(10)),
                 Text(
-                  "Catat seluruh keperluan belanjamu di sini!",
+                  "Your Collection of Card",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
@@ -59,6 +60,18 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ShopFormPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.featured_play_list_rounded),
+            title: const Text('Lihat Kartu'),
+            // Bagian redirection ke ShopFormPage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CardListPage(cardItem: cardItem),
                   ));
             },
           ),

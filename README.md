@@ -242,3 +242,345 @@ child: InkWell(
 
 ## Bonus
 ![Bonus](asset/Bonus7.png)
+
+# Tugas 8
+
+## `Navigator.push()` vs `Navigator.pushReplacement()`
+<table>
+  <tr>
+    <th>Navigator.push()</th>
+    <th>Navigator.pushReplacement()</th>
+  </tr>
+  <tr>
+    <td>menambahkan halaman baru tanpa menghapus halaman sebelumnya</td>
+    <td>menambahkan halaman baru dan menghapus halaman sebelumnya</td>
+  </tr>
+    <td>pengguna dapat kembali ke halaman sebelumnya</td>
+    <td>pengguna tidak dapat kembali ke halaman sebelumnya</td>
+  </tr>
+</table>
+
+## Jelaskan masing-masing layout widget
+<table>
+  <tr>
+  <th>widget</th>
+    <th>kegunaan</th>
+  </tr>
+    <td>Container</td>
+    <td> widget serbaguna yang dapat digunakan untuk mengatur ukuran, dekorasi, padding, dan margin elemen-elemen di dalamnya</td>
+  </tr>
+  <tr>
+    <td>Row dan Column</td>
+    <td>digunakan untuk mengatur elemen-elemen secara horizontal (Row) atau vertikal (Column)</td>
+  </tr>
+    <td>ListView</td>
+    <td>digunakan untuk menampilkan daftar elemen yang dapat digulir</td>
+  </tr>
+  </tr>
+    <td>Expanded</td>
+    <td>digunakan untuk memberikan widget anaknya ruang yang tersisa di dalam widget induknya</td>
+  </tr>
+  </tr>
+    <td>Stack</td>
+    <td>digunakan untuk menumpuk widget di atas satu sama lain</td>
+  </tr>
+  </tr>
+    <td>GridView</td>
+    <td>digunakan untuk menampilkan data dalam bentuk grid</td>
+  </tr>
+</table>
+
+## Elemen input pada form
+Elemen yang saya gunakan adalah `TextFormField` karena form yang digunakan berbentuk kualitatif yang berarti user mengetik sendiri. Elemen tersebut cocok untuk form yang akan dibuat.
+
+## Penerapan clean architecture
+Penerapan *Clean Architecture* melibatkan pembagian kode ke dalam tiga lapisan utama:
+
+1. **Presentation Layer**: 
+Bertanggung jawab untuk menampilkan data dan menerima input dari pengguna
+
+2. **Domain Layer**:
+Berisi aturan bisnis inti dan logika aplikasi
+
+3. **Data Layer**:
+Bertanggung jawab untuk mendapatkan dan menyimpan data
+
+## Pengimplementasian Checklist
+### A. Membuat minimal satu halaman baru pada aplikasi, yaitu halaman formulir tambah item baru
+1. Buka direktori `lib` dan buat file baru bernama `cardlist_form.dart` dan isi dengan kode
+```
+import 'package:flutter/material.dart';
+
+class ShopFormPage extends StatefulWidget {
+    const ShopFormPage({super.key});
+
+    @override
+    State<ShopFormPage> createState() => _ShopFormPageState();
+}
+
+class _ShopFormPageState extends State<ShopFormPage> {
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+        appBar: AppBar(
+          title: const Center(
+            child: Text(
+              'Form Tambah Produk',
+            ),
+          ),
+          backgroundColor: Colors.indigo,
+          foregroundColor: Colors.white,
+        ),
+        // TODO: Tambahkan drawer yang sudah dibuat di sini
+        body: Form(
+          child: SingleChildScrollView(),
+        ),
+      );
+    }
+}
+```
+
+2. Buat variabel baru sebagai handler dari form state, validasi form, dan penyimpanan form
+```
+class _ShopFormPageState extends State<ShopFormPage> {
+    final _formKey = GlobalKey<FormState>();
+    String _name = "";
+    int _amount = 0;
+    String _description = "";
+}
+```
+```
+body: Form(
+    key: _formKey,
+    child: SingleChildScrollView(
+      child: Column()
+    ),
+),
+```
+
+3. Buatlah widget TextFormField yang dibungkus oleh Padding sebagai salah satu children dari widget Column
+```
+  child:
+    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          decoration: InputDecoration(
+            hintText: "Nama Produk",
+            labelText: "Nama Produk",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+          ),
+          onChanged: (String? value) {
+            setState(() {
+              _name = value!;
+            });
+          },
+          validator: (String? value) {
+            if (value == null || value.isEmpty) {
+              return "Nama tidak boleh kosong!";
+            }
+            return null;
+          },
+        ),
+      ),
+    ],
+  ),
+```
+Tambahkan kode (muali dari widget `Padding`) tersebut sebanyak variabel fieldnya
+
+4. Buat tombol sebagai child `Column` dan dibungkus dengan widget `Padding` dan `Allign`
+```
+Align(
+  alignment: Alignment.bottomCenter,
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Colors.indigo),
+      ),
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {}
+      },
+      child: const Text(
+        "Save",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  ),
+),
+```
+
+### B. Mengarahkan pengguna ke halaman form tambah item baru ketika menekan tombol `Tambah Item `
+1. Pada `menu.dart` tambahkan import
+```
+import 'package:digicard/screens/cardlist_form.dart';
+```
+
+2. Tambahkan kode berikut di bawah kode `ScaffoldMessenger`
+```
+onTap: () {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(
+        content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+  if (item.name == "Tambah Kartu") {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const ShopFormPage()));
+  }
+},
+```
+
+### C. Memunculkan data sesuai isi dari formulir yang diisi dalam sebuah *pop-up*
+1. Tambahkan fungsi `showDialog()` pada bagian `onPressed()` dan munculkan widget `AlertDialog` pada fungsi tersebut. Kemudian, tambahkan juga fungsi untuk *reset* form.
+```
+child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor:
+                MaterialStateProperty.all(Colors.indigo),
+          ),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Parfum berhasil tersimpan'),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                        children: [
+                          Text('Nama: $_name'),
+                          Text('Jumlah: $_amount'),
+                          Text('Deskripsi: $_description'),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            _formKey.currentState!.reset();
+            }
+          },
+          child: const Text(
+            "Save",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+```
+
+### D. Membuat sebuah drawer
+1. Buat file baru bernama `left_drawer.dart` pada folder `widgets` dan masukan kode berikut
+```
+import 'package:digicard/screens/cardlist_form.dart';
+import 'package:flutter/material.dart';
+import 'package:digicard/screens/menu.dart';
+
+class LeftDrawer extends StatelessWidget {
+  const LeftDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          const DrawerHeader(
+            // TODO: Bagian drawer header
+          ),
+          // TODO: Bagian routing
+        ],
+      ),
+    );
+  }
+}
+```
+
+2. Tambahkan kode berikut pada `TODO: Bagian routing`
+```
+ListTile(
+  leading: const Icon(Icons.home_outlined),
+  title: const Text('Halaman Utama'),
+  // Bagian redirection ke MyHomePage
+  onTap: () {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+        ));
+  },
+),
+ListTile(
+  leading: const Icon(Icons.add_card_rounded),
+  title: const Text('Tambah Kartu'),
+  // Bagian redirection ke ShopFormPage
+  onTap: () {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ShopFormPage(),
+        ));
+  },
+),
+```
+
+3. Tambahkan kode berikut pada `TODO: Bagian drawer header`
+```
+const DrawerHeader(
+  decoration: BoxDecoration(
+    color: Colors.indigo,
+  ),
+  child: Column(
+    children: [
+      Text(
+        'Shopping List',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      Padding(padding: EdgeInsets.all(10)),
+      Text(
+        "Catat seluruh keperluan belanjamu di sini!",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+        ),
+      ),
+    ],
+  ),
+),
+```
+
+4. Pada `menu.dart` tambahkan drawernya
+```
+import 'package:digicard/widgets/left_drawer.dart';
+...
+return Scaffold(
+  appBar: AppBar(
+    title: const Text(
+      'DigiCard',
+    ),
+    backgroundColor: Colors.indigo,
+    foregroundColor: Colors.white,
+  ),
+  drawer: const LeftDrawer(),
+)
+```
+
+## Bonus
