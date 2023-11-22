@@ -1,4 +1,5 @@
 import 'package:digicard/screens/cardlist_form.dart';
+import 'package:digicard/screens/list_product.dart';
 import 'package:flutter/material.dart';
 import 'package:digicard/screens/menu.dart';
 import 'package:digicard/screens/card_collection.dart';
@@ -59,20 +60,19 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ShopFormPage(),
+                    builder: (context) => const ShopFormPage(),
                   ));
             },
           ),
           ListTile(
-            leading: const Icon(Icons.featured_play_list_rounded),
-            title: const Text('Lihat Kartu'),
-            // Bagian redirection ke ShopFormPage
+            leading: const Icon(Icons.shopping_basket),
+            title: const Text('Daftar Kartu'),
             onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CardListPage(cardItem: cardItem),
-                  ));
+              // Route menu ke halaman produk
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductPage()),
+              );
             },
           ),
         ],
